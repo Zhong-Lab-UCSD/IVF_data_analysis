@@ -25,7 +25,7 @@ for(th in thVect){
   
   ROC_rf_auc <- rep(0,100)
   for(i in 1:100){
-    ind_1 <- sample(which(df$developmentScore_cat == 1), nrow(df)/2*0.7, replace = F) # 0.7 & 0.3 yields a good result
+    ind_1 <- sample(which(df$developmentScore_cat == 1), nrow(df)/2*0.7, replace = F)
     ind_0 <- sample(which(df$developmentScore_cat == 0), length(ind_1), replace = F)
     ind <- c(ind_1,ind_0)
     train <- df[ind,]
