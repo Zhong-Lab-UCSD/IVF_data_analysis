@@ -3,5 +3,5 @@
   + prerequisite tools: Trimmomatic (version 0.36); STAR (version 2.5.4b), featureCounts (version1.6.1)
 * For scRNA-seq data processing file: scRNA_seq.sh
   + prerequisite tools: Trimmomatic (version 0.36); STAR (version 2.5.4b), featureCounts (version1.6.1)
-* For IVF data analysis files: IVF_analysis/
+* For IVF data analysis files: IVF_analysis/ and IVF_wave/
   + prerequisite tool(s): R/RStudio
