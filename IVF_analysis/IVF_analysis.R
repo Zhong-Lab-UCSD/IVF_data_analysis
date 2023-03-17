@@ -5,7 +5,7 @@ library(pROC)
 # load data
 pValues <- read.table('pValues', row.names = 1, header = T)
 pValues <- pValues[!is.na(pValues$pValue120),]
-developmentScore <- read.table('developmentScore', header = F)
+developmentScore <- read.table('developmentScore', header = T)
 
 normalized_count <- read.table('IVF_NC.tsv', row.names = 1, header = T, sep = '\t', check.names=FALSE)
 normalized_count <- normalized_count[,-1]
