@@ -3,9 +3,15 @@ library(randomForest)
 library(pROC)
 
 # load data
-df1 <- read.table('df1', row.names = 1, header = T)
-df2 <- read.table('df2', row.names = 1, header = T)
-developmentScore <- as.numeric(unlist(read.table('developmentScore', header = F)))
+pValues <- read.table('pValues', row.names = 1, header = T)
+pValues <- pValues[!is.na(pValues$pValue120),]
+developmentScore <- read.table('developmentScore', header = F)
+
+normalized_count <- read.table('IVF_NC.tsv', row.names = 1, header = T, sep = '\t', check.names=FALSE)
+normalized_count <- normalized_count[,-1]
+metaInfo <- xlsx::read.xlsx('Table-S-Sample-MetaInfo.xlsx', 1)
+
+normalized_count <- normalized_count[,metaInfo$Sample.ID[metaInfo$Collection.time..h. == '120' & metaInfo$Arrest.status != 'N/A']]
 
 # perform random sub-sampling
 set.seed(125)
@@ -13,12 +19,12 @@ thVect <- c(0.005,0.008,seq(0.01,0.04,0.004),seq(0.04,0.09,0.02),seq(0.1,0.5,0.0
 num <- rep(0,length(c(0.005,0.008,seq(0.01,0.04,0.004),seq(0.04,0.09,0.02),seq(0.1,0.5,0.05))))
 aveAUC <- rep(0,length(c(0.01,seq(0.05,0.5,0.05))))
 for(th in thVect){
-  t <- rownames(df1[df1$pValue120 < th,])
-  df <- df2[t,]
+  t <- rownames(pValues[pValues$pValue120 < th,])
+  df <- normalized_count[t,]
   df <- df[rowSums(df > 0) > ncol(df) * 0.7,]
   num[which(thVect == th)] <- nrow(df)
   df <- as.data.frame(t(df))
-  df$developmentScore <- developmentScore
+  df$developmentScore <- developmentScore$developmentScore[match(rownames(df), developmentScore$SampleID)]
   df$developmentScore_cat <- as.factor(as.numeric(df$developmentScore >=25))
   df <- df[,-which(colnames(df) == 'developmentScore')]
   colnames(df)[grep('-',colnames(df))] <- gsub('-','_',colnames(df)[grep('-',colnames(df))])
